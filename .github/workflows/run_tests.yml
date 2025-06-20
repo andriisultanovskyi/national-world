@@ -1,0 +1,38 @@
+name: Automated Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      deployment_target:
+        description: Choose target
+        required: true
+        default:
+        type: choice
+        options:
+          - test_click_button_news
+
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      -
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install Chrome
+        run: sudo apt-get install google-chrome-stable
+
+      - name: install dependencies
+        run: pip install -r requirements.txt
+
+      - name: test_home_page
+        if: "github.event.inputs.deployment_target == 'test_click_button_news'"
+        run: pytest national-world/tests/tests_home_page.py/test_click_button_news
+
