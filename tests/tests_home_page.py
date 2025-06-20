@@ -7,16 +7,6 @@ import time
 
 
 
-# def test_close_popup(driver):
-#     driver.implicitly_wait(10)
-#     iframe = driver.find_element(By.ID, "sp_message_iframe_1323424")
-#     driver.switch_to.frame(iframe)
-#     button = driver.find_element(By.XPATH, ".//button[contains(text(), 'Accept')]")
-#     button.click()
-#     driver.switch_to.default_content()
-
-
-
 
 # The test checks the click of the "Test" button on the header and goes to the 'Test for Students' page
 def test_click_button_news(driver, close_cookie_popup):
