@@ -5,6 +5,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from webdriver_manager.chrome import ChromeDriverManager
 import tempfile
 import shutil
 import logging
@@ -33,7 +34,8 @@ def create_driver():
     # options.add_argument("--headless=new")
     # options.add_argument("--headless=old")
     options.add_argument("--window-size=1920,1080")
-    driver = webdriver.Chrome(options=options)
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    # driver = webdriver.Chrome(options=options)
     return driver
 
 
@@ -46,24 +48,6 @@ def close_cookie_popup(driver):
     button = driver.find_element(By.XPATH, ".//button[contains(text(), 'Accept')]")
     button.click()
     driver.switch_to.default_content()
-
-
-    # try:
-    #     # Waiting for popup to appear
-    #     WebDriverWait(driver, timeout).until(
-    #         EC.visibility_of_element_located((By.ID, "notice"))
-    #     )
-    #     print("Popup found, try to close...")
-    #
-    #     # Waiting for "Accept" button will be clickable
-    #     accept_button = WebDriverWait(driver, timeout).until(
-    #         EC.element_to_be_clickable((By.CLASS_NAME, "accept-all"))
-    #     )
-    #     accept_button.click()
-    #     print("Popup closed.")
-    # except TimeoutException:
-    #     print("Popup did not appear - continue the test")
-
 
 
 @pytest.fixture()
