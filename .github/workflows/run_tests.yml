@@ -46,3 +46,4 @@ jobs:
         if: "github.event.inputs.deployment_target == 'test_click_button_news'"
         run: pytest tests/tests_home_page.py::test_click_button_news
 
+
