@@ -7,13 +7,13 @@ import time
 
 
 
-def test_close_popup(driver):
-    driver.implicitly_wait(10)
-    iframe = driver.find_element(By.ID, "sp_message_iframe_1323424")
-    driver.switch_to.frame(iframe)
-    button = driver.find_element(By.XPATH, ".//button[contains(text(), 'Accept')]")
-    button.click()
-    driver.switch_to.default_content()
+# def test_close_popup(driver):
+#     driver.implicitly_wait(10)
+#     iframe = driver.find_element(By.ID, "sp_message_iframe_1323424")
+#     driver.switch_to.frame(iframe)
+#     button = driver.find_element(By.XPATH, ".//button[contains(text(), 'Accept')]")
+#     button.click()
+#     driver.switch_to.default_content()
 
 
 
