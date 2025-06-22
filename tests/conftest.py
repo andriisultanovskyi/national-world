@@ -34,7 +34,7 @@ def create_driver():
     # options.add_argument("--headless=new")
     # options.add_argument("--headless=old")
     options.add_argument("--window-size=1920,1080")
-    options.add_argument("--user-data-dir=/tmp/chrome-user-data")
+    # options.add_argument("--user-data-dir=/tmp/chrome-user-data")
     driver = webdriver.Chrome(
         service=Service(ChromeDriverManager().install()),
         options=options
