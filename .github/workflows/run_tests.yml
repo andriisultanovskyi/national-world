@@ -20,7 +20,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup Python
+      - name: Setup Python env
         uses: actions/setup-python@v5
         with:
           python-version: "3.10"
@@ -41,6 +41,11 @@ jobs:
 
       - name: Checking installations
         run: pip freeze
+
+      - name: Start virtual display
+        run: |
+          sudo apt-get install xvfb
+          Xvfb :99 & export DISPLAY=:99
 
       - name: Run test_click_button_news
         if: "github.event.inputs.deployment_target == 'test_click_button_news'"
