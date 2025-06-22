@@ -1,5 +1,4 @@
 import pytest
-import time
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -13,7 +12,7 @@ import os
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 from selenium.webdriver.chrome.options import Options
-from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException, ElementNotInteractableException
+from selenium.common.exceptions import TimeoutException, NoSuchElementException, ElementClickInterceptedException, ElementNotInteractableException
 
 
 # Logging settings
@@ -23,6 +22,7 @@ logger = logging.getLogger(__name__)
 
 def create_driver():
     options = webdriver.ChromeOptions()
+    options = Options()
     options.add_argument("--no-default-browser-check")
     options.add_argument("--no-first-run")
     options.add_argument("--disable-search-engine-choice-screen")
@@ -31,52 +31,44 @@ def create_driver():
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--no-sandbox")
     # options.add_argument("--headless")
-    options.add_argument("--headless=new")
+    # options.add_argument("--headless=new")
     # options.add_argument("--headless=old")
     options.add_argument("--window-size=1920,1080")
     options.add_argument("--user-data-dir=/tmp/chrome-user-data")
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),
-    options=options)
+    driver = webdriver.Chrome(
+        service=Service(ChromeDriverManager().install()),
+        options=options
+    )
     return driver
-
 
 
 @pytest.fixture
 def close_cookie_popup(driver):
-    driver.implicitly_wait(10)
-    iframe = driver.find_element(By.ID, "sp_message_iframe_1323424")
-    driver.switch_to.frame(iframe)
-    button = driver.find_element(By.XPATH, ".//button[contains(text(), 'Accept')]")
-    button.click()
-    driver.switch_to.default_content()
+    wait = WebDriverWait(driver, 10)
+    try:
+        iframe = wait.until(EC.presence_of_element_located(
+            (By.XPATH, "//iframe[contains(@id, 'sp_message_iframe')]")
+        ))
+        driver.switch_to.frame(iframe)
+        button = wait.until(EC.element_to_be_clickable(
+            (By.XPATH, ".//button[contains(text(), 'Accept')]")
+        ))
+        button.click()
+        driver.switch_to.default_content()
+    except TimeoutException:
+        print("Cookie popup iframe or button not found — continuing test.")
+        driver.switch_to.default_content()
+    except NoSuchElementException:
+        print("Cookie popup button not found after switching to iframe — continuing test.")
+        driver.switch_to.default_content()
 
 
 @pytest.fixture()
 def driver():
     driver = create_driver()
-    driver.get('https://www.nationalworld.com/')
-
-    try:
-        # Waiting for popup to appear
-        WebDriverWait(driver, 10).until(
-            EC.alert_is_present()
-        )
-        print("Popup found, try to close...")
-        alert = driver.switch_to.alert
-        alert.accept()
-        # Waiting for "Accept" button will be clickable
-        # accept_button = WebDriverWait(driver, timeout).until(
-        #     EC.element_to_be_clickable((By.CLASS_NAME, "accept-all"))
-        # )
-        # accept_button.click()
-        print("Popup closed.")
-    except TimeoutException:
-        print("Popup did not appear - continue the test")
-
+    # driver.get('https://www.nationalworld.com/')
     driver.maximize_window()
-    time.sleep(10)
     yield driver
-    time.sleep(1)
     try:
         driver.quit()
     except Exception as e:
