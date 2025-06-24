@@ -27,18 +27,18 @@ jobs:
 
       - name: Install Chrome
         run: |
-          sudo apt-get update
-          sudo apt-get install -y wget gnupg curl
-          curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor | sudo tee /usr/share/keyrings/google-chrome.gpg > /dev/null
-          echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
-          sudo apt-get update
-          sudo apt-get install -y google-chrome-stable
+#          sudo apt-get update
+#          sudo apt-get install -y wget gnupg curl
+#          curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor | sudo tee /usr/share/keyrings/google-chrome.gpg > /dev/null
+#          echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+#          sudo apt-get update
+          sudo apt-get install google-chrome-stable
 
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Checking installations
-        run: pip freeze
+#      - name: Checking installations
+#        run: pip freeze
 
       - name: Start virtual display
         run: |
