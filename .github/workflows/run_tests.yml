@@ -31,9 +31,6 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-#      - name: Checking installations
-#        run: pip freeze
-
       - name: Start virtual display
         run: |
           sudo apt-get install xvfb
@@ -41,6 +38,8 @@ jobs:
 
       - name: Run test_click_button_news
         if: "github.event.inputs.deployment_target == 'test_click_button_news'"
+        env:
+          DISPLAY: :99
         run: PYTHONPATH=. pytest tests/tests_home_page.py::test_click_button_news
 
 
