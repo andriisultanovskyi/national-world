@@ -21,8 +21,9 @@ logger = logging.getLogger(__name__)
 
 
 def create_driver():
-    options = webdriver.ChromeOptions()
     options = Options()
+    user_data_dir = tempfile.mkdtemp()
+    options.add_argument(f"--user-data-dir={user_data_dir}")
     options.add_argument("--no-default-browser-check")
     options.add_argument("--no-first-run")
     options.add_argument("--disable-search-engine-choice-screen")
