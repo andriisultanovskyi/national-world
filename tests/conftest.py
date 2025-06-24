@@ -36,7 +36,7 @@ def create_driver():
     # options.add_argument("--headless=old")
     options.add_argument("--window-size=1920,1080")
     driver = webdriver.Chrome(
-        service=Service(ChromeDriverManager().install()),
+        service=Service(ChromeDriverManager(version="137.0.7151.55").install()),
         options=options
     )
     return driver
@@ -66,8 +66,6 @@ def close_cookie_popup(driver):
 @pytest.fixture()
 def driver():
     driver = create_driver()
-    # driver.get('https://www.nationalworld.com/')
-    driver.maximize_window()
     yield driver
     try:
         driver.quit()
